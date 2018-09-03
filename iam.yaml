@@ -1,44 +1,33 @@
 # Create IAM Role for EKS
-Type: AWS::IAM::Role
-Properties:
-  # Trust policy associated with this role. Only one assume role can be used with a role.
-  # Required: Yes
-  # Format: JSON or YAML - CF will always convert to JSON before submitting to IAM.
-  AssumeRolePolicyDocument:
-      Version: '2018-09-03'
-      Statement:
-      - Effect: Allow
-        Principal:
-          Service:
-          - ec2.amazonaws.com
-        Action:
-        - sts:AssumeRole
-
-  # One or more managed policy ARNs to attach to this role.
-  # Required: No
-  # Type: List of String values
-  ManagePolicyArns:
-  - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-  - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-  - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-
-  # The maximum session duration (in seconds) for the specified role.
-  # Required: No
-  # Type: Integer (min 3600 - max 43200)
-#  MaxSessionDuration: 0
-
-  # The path associated with this role.
-  # Required: No
-  # Type: String
-#  Path: "/"
-
-  # The policies to associate to this role.
-  # Required: No
-  # Type: List of IAM Policies
-#  Policies:
-#  - Policies
-
-  # A name for the IAM role. CF will generate a unique ID and use that ID for the group name.
-  # Required: No
-  # Type: String
-#  RoleName: String
+Resources:
+  MyECSRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+    # Trust policy associated with this role. Only one assume role can be used with a role.
+    # Required: Yes
+    # Format: JSON or YAML - CF will always convert to JSON before submitting to IAM.
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal:
+            Service:
+            - "ec2.amazonaws.com"
+          Action:
+          - "sts:AssumeRole"
+      # The path associated with this role.
+      # Required: No
+      # Type: String
+      Path: "/"
+      # The policies to associate to this role.
+      # Required: No
+      # Type: List of IAM Policies
+      Policies:
+      - PolicyName: "MyECSPolicy"
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+          - Effect: "Allow"
+            Action:
+            - "eks:*"
+            Resource: "*"
